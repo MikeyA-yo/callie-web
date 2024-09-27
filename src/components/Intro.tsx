@@ -20,13 +20,12 @@ export default function Intro() {
   return (
     <>
       <div className="flex flex-col min-h-screen gap-2 items-center justify-center">
-        <h1 className="text-3xl">Callie</h1>
-        <div className="text-xl text-center">
+        <div className="text-xl font-mono text-center">
           <p>Call and Chat live online.</p>
           <p>Easily make group calls with friends and loved ones.</p>
         </div>
         {condition && (
-          <button className="p-2 bg-[#31363F]">
+          <button className="p-2 bg-[#31363F] font-sans">
             <a href={links[os]} download={"Callie"}>
               Download for {os}
             </a>
