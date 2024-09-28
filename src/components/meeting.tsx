@@ -15,7 +15,8 @@ export default function Meeting() {
   const [muted, setMuted] = useState(false);
   const [offed, setOffed] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [rStreams, setRStreams] = useState<MediaStream[]>([])
+  const [chats, setChats] = useState<string[]>([]);
+  //const [rStreams, setRStreams] = useState<MediaStream[]>([])
   const peers: any = {};
   const effectRan = useRef(false);
   useEffect(() => {
@@ -30,6 +31,13 @@ export default function Meeting() {
         });
         setCamStream(stream);
       }
+      socket.on("user-disconnected", (id, p, uname)=>{
+        peers[id] && peers[id].close();
+        setConns(p);
+      });
+      socket.on("data", (data)=>{
+        setChats((prev) => [...prev, data]);
+      })
       socket.on("updateP", (p) => {
         setConns(p);
       });
@@ -52,10 +60,6 @@ export default function Meeting() {
           }
         }
       });
-      
-      peer.on("open", (id) => {
-        setID(id);
-      });
       getStream();
     }
   }, []);
@@ -67,9 +71,6 @@ export default function Meeting() {
     }
   }, [camStream]);
   useEffect(() => {
-    console.log(conns, id);
-  }, [conns]);
-  useEffect(() => {
     if (id.length > 2) {
       socket.emit(
         "join-room",
@@ -80,22 +81,20 @@ export default function Meeting() {
         offed
       );
       socket.on("joined", (id) => {
-        console.log(id)
         call(id);
       });
     }
   }, [id]);
   
+  peer.on("open", (id) => {
+    setID(id);
+  });
   peer.on("call", (call) => {
     if (camStream) {
       call.answer(camStream);
       call.on("stream", (stream) => {
-        setRStreams(prev => [...prev, stream])
-        console.log(stream)
-        alert(stream)
         addUser(stream, call.peer);
         updateMediaStates();
-        console.log(stream);
       });
       peers[call.peer] = call;
     }
@@ -104,9 +103,6 @@ export default function Meeting() {
     if (camStream) {
       const conn = peer.call(id, camStream as MediaStream);
       conn.on("stream", (stream) => {
-        setRStreams(prev => [...prev, stream])
-        console.log(stream)
-        alert(stream)
         addUser(stream, id);
         updateMediaStates();
       });
