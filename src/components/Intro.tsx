@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-const links: links = {
+export const links: links = {
   Linux:
     "https://github.com/MikeyA-yo/callie/releases/download/v0.0.8/linux-callie-0.0.8x64.zip",
   Windows:

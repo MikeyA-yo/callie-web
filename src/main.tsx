@@ -4,6 +4,7 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root.tsx";
 import Join from "./components/join.tsx";
+import Dl from "./components/dl.tsx";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
         path: "/join",
         element: <Join />,
       },
+      {
+        path:"/dl",
+        element:<Dl />
+      }
     ],
   },
   {
