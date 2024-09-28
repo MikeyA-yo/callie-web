@@ -7,7 +7,7 @@ export default function Dl(){
             <div className="flex flex-col gap-2 p-4 bg-[#31363F] rounded">
               {link.map((l, i)=>{
                 return (
-                    <a href={l} key={i} download={"Callie"} className="bg-[#76ABAE] p-2" >
+                    <a href={l} key={i} download={"Callie"} className="bg-[#76ABAE] shadow-md shadow-[#EEEEEE] p-2" >
                         Download for {os[i]} (zip)
                     </a>
                 )

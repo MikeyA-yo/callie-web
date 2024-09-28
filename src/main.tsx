@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./routes/root.tsx";
 import Join from "./components/join.tsx";
 import Dl from "./components/dl.tsx";
+import Meeting from "./components/meeting.tsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path:"/join/:roomID",
+    element: <Meeting />
   }
 ]);
 createRoot(document.getElementById("root")!).render(

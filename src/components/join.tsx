@@ -11,7 +11,9 @@ export default function Join(){
                    <input className="p-2 rounded text-[#31363F] outline-none focus:border-[0.15rem] focus:border-[#76ABAE]" placeholder="username.." onChange={(e)=> setUname(e.target.value)} />
                    Room ID:
                    <input className="p-2 rounded text-[#31363F] outline-none focus:border-[0.15rem] focus:border-[#76ABAE]" placeholder="room id or address" onChange={(e) => setRoomID(e.target.value)} />
-                   <button className="p-2 border rounded border-[#76ABAE] hover:border-0 hover:bg-[#76ABAE]">Join</button>
+                   <button className="p-2 border rounded border-[#76ABAE] hover:border-0 hover:bg-[#76ABAE]" onClick={()=>{
+                     location.replace(`/join/${roomID}?uname=${uname}`)
+                   }}>Join</button>
                 </div>
             </div>
        </>
