@@ -32,19 +32,22 @@ export function VidDivs({
     return <></>;
   } else {
     let users = participants.filter(p => p.userId !== id)
-    return (
-      <>
-        <Swiper
-          spaceBetween={3}
-          slidesPerView={participants.length > 2 ? 2 : 1}
-          modules={[Navigation, Pagination]}
-          navigation
-          pagination
-        >
-          <DisplayGrid participants={users} />
-        </Swiper>
-      </>
-    );
+    if(users.length > 6){
+        return (
+            <>
+              <Swiper
+                spaceBetween={3}
+                slidesPerView={1}
+                modules={[Navigation, Pagination]}
+                navigation
+                pagination
+              >
+                <DisplayGrid participants={users} />
+              </Swiper>
+            </>
+          );
+    }
+    return <DisplayGrid participants={users} />
   }
 }
 function Grids({participants}:{participants: Particpant[]}) {

@@ -15,95 +15,48 @@ export default function Meeting() {
   const [muted, setMuted] = useState(false);
   const [offed, setOffed] = useState(false);
   const [showChat, setShowChat] = useState(false);
+  const [rStreams, setRStreams] = useState<MediaStream[]>([])
   const peers: any = {};
-  const effectRan = useRef(false)
+  const effectRan = useRef(false);
   useEffect(() => {
-    if(effectRan.current){
-        //
-    }else{
-        effectRan.current = true
-        async function getStream() {
-            const stream = await navigator.mediaDevices.getUserMedia({
-              audio: true,
-              video: true,
-            });
-            setCamStream(stream);
+    if (effectRan.current) {
+      //
+    } else {
+      effectRan.current = true;
+      async function getStream() {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: true,
+        });
+        setCamStream(stream);
+      }
+      socket.on("updateP", (p) => {
+        setConns(p);
+      });
+      let sp = new URLSearchParams(location.search);
+      setUname(sp.get("uname") ?? "User");
+
+      socket.on("muted", (id, val) => {
+        if (document.getElementById(id)) {
+          let vid = document.getElementById(id) as HTMLVideoElement;
+          vid.muted = val;
+        }
+      });
+      socket.on("offed", (id, val) => {
+        if (document.getElementById(id)) {
+          let vid = document.getElementById(id) as HTMLVideoElement;
+          if (val) {
+            vid.classList.add("hidden");
+          } else {
+            vid.classList.remove("hidden");
           }
-          socket.on("updateP", (p) => {
-            setConns(p);
-          });
-          let sp = new URLSearchParams(location.search);
-          setUname(sp.get("uname") ?? "User");
-          socket.emit(
-            "join-room",
-            location.pathname.split("/").pop(),
-            id,
-            uname,
-            muted,
-            offed
-          );
-          socket.on("join-room", (id) => {
-            call(id);
-          });
-          socket.on("muted", (id, val) => {
-              if (document.getElementById(id)) {
-                let vid = document.getElementById(id) as HTMLVideoElement;
-                vid.muted = val;
-              }
-            });
-            socket.on("offed", (id, val) => {
-              if (document.getElementById(id)) {
-                let vid = document.getElementById(id) as HTMLVideoElement;
-                if (val) {
-                  vid.classList.add("hidden");
-                } else {
-                  vid.classList.remove("hidden");
-                }
-              }
-            });
-          function call(id: string) {
-            if (camStream) {
-              const conn = peer.call(id, camStream as MediaStream);
-              conn.on("stream", (stream) => {
-                addUser(stream, id);
-                updateMediaStates();
-              });
-              peers[id] = conn;
-            }
-          }
-          function addUser(stream: MediaStream, id: string) {
-            const existing = document.getElementById(id);
-            if (!existing) {
-              const video = document.createElement("video");
-              video.autoplay = true;
-              video.controls = false;
-              video.className = "max-h-44 max-w-44";
-              video.id = id;
-              video.srcObject = stream;
-              video.addEventListener("dblclick", () => {
-                video.requestFullscreen();
-              });
-              let parent = document.getElementById(id.substring(0, id.indexOf("-")));
-              parent?.insertBefore(video, parent.lastChild);
-            }
-          }
-          function updateMediaStates() {
-            conns.map((p) => {
-              let vid = document.getElementById(p.userId) as HTMLVideoElement;
-              if (vid) {
-                vid.muted = p.muted;
-                if (p.offed) {
-                  vid.classList.add("hidden");
-                } else {
-                  vid.classList.remove("hidden");
-                }
-              }
-            });
-          }
-          peer.on("open", (id) => {
-            setID(id);
-          });
-          getStream();
+        }
+      });
+      
+      peer.on("open", (id) => {
+        setID(id);
+      });
+      getStream();
     }
   }, []);
 
@@ -113,10 +66,87 @@ export default function Meeting() {
       userCam.srcObject = camStream;
     }
   }, [camStream]);
+  useEffect(() => {
+    console.log(conns, id);
+  }, [conns]);
+  useEffect(() => {
+    if (id.length > 2) {
+      socket.emit(
+        "join-room",
+        location.pathname.split("/").pop(),
+        id,
+        uname,
+        muted,
+        offed
+      );
+      socket.on("joined", (id) => {
+        console.log(id)
+        call(id);
+      });
+    }
+  }, [id]);
+  
+  peer.on("call", (call) => {
+    if (camStream) {
+      call.answer(camStream);
+      call.on("stream", (stream) => {
+        setRStreams(prev => [...prev, stream])
+        console.log(stream)
+        alert(stream)
+        addUser(stream, call.peer);
+        updateMediaStates();
+        console.log(stream);
+      });
+      peers[call.peer] = call;
+    }
+  });
+  function call(id: string) {
+    if (camStream) {
+      const conn = peer.call(id, camStream as MediaStream);
+      conn.on("stream", (stream) => {
+        setRStreams(prev => [...prev, stream])
+        console.log(stream)
+        alert(stream)
+        addUser(stream, id);
+        updateMediaStates();
+      });
+      peers[id] = conn;
+    }
+  }
+  function addUser(stream: MediaStream, id: string) {
+    const existing = document.getElementById(id);
+    if (!existing) {
+      const video = document.createElement("video");
+      video.autoplay = true;
+      video.controls = false;
+      video.className = "max-h-44 max-w-44";
+      video.id = id;
+      video.srcObject = stream;
+      video.addEventListener("dblclick", () => {
+        video.requestFullscreen();
+      });
+      let parent = document.getElementById(id.substring(0, id.indexOf("-")));
+      console.log(parent);
+      parent?.insertBefore(video, parent.lastChild);
+    }
+  }
+  function updateMediaStates() {
+    conns.map((p) => {
+      let vid = document.getElementById(p.userId) as HTMLVideoElement;
+      if (vid) {
+        vid.muted = p.muted;
+        if (p.offed) {
+          vid.classList.add("hidden");
+        } else {
+          vid.classList.remove("hidden");
+        }
+      }
+    });
+  }
   return (
     <>
-      <div className="flex flex-col w-full h-full">
-        {/* <VidDivs participants={conns} id={id} /> */}
+      <div className="flex flex-col items-center w-full min-h-screen bg-[#222831]">
+        <VidDivs participants={conns.filter((c) => c.userId != id)} id={id} />
         <SelfCam>
           <div className="flex flex-col items-center gap-2">
             {camStream && <p>You</p>}
