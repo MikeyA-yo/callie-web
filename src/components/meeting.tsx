@@ -31,13 +31,13 @@ export default function Meeting() {
         });
         setCamStream(stream);
       }
-      socket.on("user-disconnected", (id, p, uname)=>{
+      socket.on("user-disconnected", (id, p, uname) => {
         peers[id] && peers[id].close();
         setConns(p);
       });
-      socket.on("data", (data)=>{
+      socket.on("data", (data) => {
         setChats((prev) => [...prev, data]);
-      })
+      });
       socket.on("updateP", (p) => {
         setConns(p);
       });
@@ -71,7 +71,7 @@ export default function Meeting() {
     }
   }, [camStream]);
   useEffect(() => {
-    if (id.length > 2) {
+    if (camStream && id.length > 2) {
       socket.emit(
         "join-room",
         location.pathname.split("/").pop(),
@@ -84,8 +84,8 @@ export default function Meeting() {
         call(id);
       });
     }
-  }, [id]);
-  
+  }, [id, camStream]);
+
   peer.on("open", (id) => {
     setID(id);
   });
@@ -141,8 +141,7 @@ export default function Meeting() {
   }
   return (
     <>
-      <div className="flex flex-col items-center w-full min-h-screen bg-[#222831]">
-        <VidDivs participants={conns.filter((c) => c.userId != id)} id={id} />
+      <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#222831]">
         <SelfCam>
           <div className="flex flex-col items-center gap-2">
             {camStream && <p>You</p>}
@@ -196,6 +195,7 @@ export default function Meeting() {
             )}
           </div>
         </SelfCam>
+        <VidDivs participants={conns.filter((c) => c.userId != id)} id={id} />
       </div>
     </>
   );
