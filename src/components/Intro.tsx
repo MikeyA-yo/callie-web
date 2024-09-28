@@ -21,7 +21,7 @@ export default function Intro() {
   let condition = os === ("Windows" || "MacOS" || "Linux");
   return (
     <>
-      <div className="flex flex-col min-h-screen gap-2 items-center justify-center">
+      <div className="flex flex-col min-h-screen gap-2 p-2 items-center justify-center">
         <motion.div
           initial={{ opacity: 0, y: "-100%" }}
           animate={{ opacity: 1, y: 0 }}

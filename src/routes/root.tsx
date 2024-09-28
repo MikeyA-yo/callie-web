@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Intro from "../components/Intro";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 export default function Root() {
   return (
     <>
@@ -17,24 +17,24 @@ function Nav() {
   return (
     <>
       <div className="fixed flex-col z-10 flex w-full">
-      <div className="w-full flex items-center bg-[#31363F] justify-between">
-        <h1 className="text-3xl p-2">Callie</h1>
-        <div className="lg:flex md:flex hidden justify-around items-center p-4 gap-4">
-          <a href="/" className="bg-[#76ABAE] p-2">
-            Home
-          </a>
-          <a href="/dl" className="bg-[#76ABAE] p-2">
-            Download
-          </a>
-          <a href="/join" className="bg-[#76ABAE] p-2">
-            Join Meeting
-          </a>
+        <div className="w-full flex items-center bg-[#31363F] justify-between">
+          <h1 className="text-3xl p-2">Callie</h1>
+          <div className="lg:flex md:flex hidden justify-around items-center p-4 gap-4">
+            <a href="/" className="bg-[#76ABAE] p-2">
+              Home
+            </a>
+            <a href="/dl" className="bg-[#76ABAE] p-2">
+              Download
+            </a>
+            <a href="/join" className="bg-[#76ABAE] p-2">
+              Join Meeting
+            </a>
+          </div>
+          <div className="lg:hidden md:hidden p-2">
+            <Determiner open={open} click={() => setOpen(!open)} />
+          </div>
         </div>
-        <div className="lg:hidden md:hidden p-2">
-          <Determiner open={open} click={() => setOpen(!open)} />
-        </div>
-      </div>
-      {open && <MenuLists />}
+        {open && <MenuLists />}
       </div>
     </>
   );
@@ -56,23 +56,26 @@ function Determiner({
 function MenuLists() {
   return (
     <>
-      <motion.div
-       initial={{translateY:"-100%", opacity:0.4}}
-       animate={{translateY:0, opacity:1}}
-       transition={{duration:0.5, delay:0.2}}
-      >
-      <div className="flex flex-col bg-[#31363F]">
-        <a href="/" className="bg-[#76ABAE] p-2">
-          Home
-        </a>
-        <a href="/dl" className="bg-[#76ABAE] p-2">
-          Download
-        </a>
-        <a href="/join" className="bg-[#76ABAE] p-2">
-          Join Meeting
-        </a>
-      </div>
-      </motion.div>
+      <AnimatePresence>
+        <motion.div
+          initial={{ translateY: "-100%", opacity: 0.4 }}
+          animate={{ translateY: 0, opacity: 1 }}
+          exit={{translateY:"-100%", opacity:0.4}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          <div className="flex flex-col bg-[#31363F]">
+            <a href="/" className="bg-[#76ABAE] p-2">
+              Home
+            </a>
+            <a href="/dl" className="bg-[#76ABAE] p-2">
+              Download
+            </a>
+            <a href="/join" className="bg-[#76ABAE] p-2">
+              Join Meeting
+            </a>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 }
