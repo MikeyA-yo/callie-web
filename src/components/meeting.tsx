@@ -122,7 +122,6 @@ export default function Meeting() {
         video.requestFullscreen();
       });
       let parent = document.getElementById(id.substring(0, id.indexOf("-")));
-      console.log(parent);
       parent?.insertBefore(video, parent.lastChild);
     }
   }
