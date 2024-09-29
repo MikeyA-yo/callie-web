@@ -195,9 +195,9 @@ export default function Meeting() {
                 </div>
                 <div
                   className="flex bg-[#76ABAE] flex-col items-center gap-1 p-2 rounded-full cursor-pointer"
-                  
                   onClick={() => {
-                      setShowChat(!showChat)
+                      !chPop.current && setShowChat(!showChat)
+                      if(!showChat) chPop.current = false
                   }} // this is not a bug have to leave it like this cause of global document listener
                 >
                   <ChatIcon />
@@ -233,6 +233,7 @@ export default function Meeting() {
             }}
             close={() => {
               setShowChat(false);
+              chPop.current = true
             }}
             enterSend={(e) => {
               if (e.key === "Enter") {
