@@ -101,13 +101,17 @@ function DisplayGrid({ participants }: { participants: Particpant[] }) {
     if (temp.length > 0) {
       sectionalGrids.push(temp);
     }
-    return sectionalGrids.map((participant, i) => {
-      return (
-        <SwiperSlide key={i}>
-          <Grids participants={participant} />
-        </SwiperSlide>
-      );
-    });
+    return (
+      <>
+        {sectionalGrids.map((participant, i) => {
+          return (
+            <SwiperSlide key={i}>
+              <Grids participants={participant} />
+            </SwiperSlide>
+          );
+        })}
+      </>
+    );
   }
   if (participants.length > 13 && screen.width > 600) {
     let sectionalGrids: Particpant[][] = [];
@@ -122,13 +126,17 @@ function DisplayGrid({ participants }: { participants: Particpant[] }) {
     if (temp.length > 0) {
       sectionalGrids.push(temp);
     }
-    return sectionalGrids.map((participant, i) => {
-      return (
-        <SwiperSlide key={i}>
-          <Grids participants={participant} />
-        </SwiperSlide>
-      );
-    });
+    return (
+      <>
+        {sectionalGrids.map((participant, i) => {
+          return (
+            <SwiperSlide key={i}>
+              <Grids participants={participant} />
+            </SwiperSlide>
+          );
+        })}
+      </>
+    );
   }
   return <Grids participants={participants} />;
 }
