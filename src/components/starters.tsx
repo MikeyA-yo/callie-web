@@ -9,7 +9,7 @@ export function Mute({
   }) {
     let clString = muted
       ? "cursor-pointer"
-      : "rounded-full p-2 bg-[#ECDFCC] text-[#697565] cursor-pointer";
+      : "rounded-full p-2 bg-[#76ABAE] text-[#EEEEEE] cursor-pointer";
       if(!cursor){
         clString = clString.replace("cursor-pointer", "")
       }
@@ -17,7 +17,7 @@ export function Mute({
       <>
         <div className={clString}>
           {!muted && <MicSvg onClick={mute} />}
-          {muted && <MicSlashSvg onClick={mute} className="size-6 fill-[#ECDFCC]" />}
+          {muted && <MicSlashSvg onClick={mute} className="size-6 fill-[#EEEEEE]" />}
         </div>
       </>
     );
@@ -33,7 +33,7 @@ export function Mute({
   }) {
     let clString = offed
       ? "cursor-pointer"
-      : "rounded-full p-2 bg-[#ECDFCC] text-[#697565] cursor-pointer";
+      : "rounded-full p-2 bg-[#76ABAE] text-[#EEEEEE] cursor-pointer";
       if(!cursor){
         clString = clString.replace("cursor-pointer", "")
       }

@@ -29,41 +29,45 @@ export function VidDivs({
     });
   }, [participants]);
   if (participants.length == 0) {
-    return <></>;
+    return (
+      <>
+        <h2 className="text-3xl">You are alone in this meeting</h2>
+      </>
+    );
   } else {
-    let users = participants.filter(p => p.userId !== id)
-    if(users.length > 6){
-        return (
-            <>
-              <Swiper
-                spaceBetween={3}
-                slidesPerView={1}
-                modules={[Navigation, Pagination]}
-                navigation
-                pagination
-              >
-                <DisplayGrid participants={users} />
-              </Swiper>
-            </>
-          );
+    let users = participants.filter((p) => p.userId !== id);
+    if (users.length > 6) {
+      return (
+        <>
+          <Swiper
+            spaceBetween={3}
+            slidesPerView={1}
+            modules={[Navigation, Pagination]}
+            navigation
+            pagination
+          >
+            <DisplayGrid participants={users} />
+          </Swiper>
+        </>
+      );
     }
-    return <DisplayGrid participants={users} />
+    return <DisplayGrid participants={users} />;
   }
 }
-function Grids({participants}:{participants: Particpant[]}) {
+function Grids({ participants }: { participants: Particpant[] }) {
   return (
     <>
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-2 flex-wrap p-4 bg-[#31363F]">
         {participants.map((participant, i) => {
-        let clName = participant.offed ? "size-32" : "size-32 hidden";
+          let clName = participant.offed ? "size-32" : "size-32 hidden";
           return (
             <div
-            key={i}
+              key={i}
               id={participant.userId.substring(
                 0,
                 participant.userId.indexOf("-")
               )}
-              className="flex flex-col gap-1 items-center"
+              className="flex flex-col gap-1 p-2 bg-[#222831] rounded-md items-center"
             >
               <p className="self-end">{participant.uname}</p>
               <UserAvatar
@@ -83,31 +87,50 @@ function Grids({participants}:{participants: Particpant[]}) {
     </>
   );
 }
-function DisplayGrid({participants}:{participants:Particpant[]}){
-    if (participants.length > 6 && screen.width < 600){
-        let sectionalGrids:Particpant[][] = [];
-        let temp:Particpant[] = []
-        participants.map((p)=>{
-          if(temp.length === 6) {
-            sectionalGrids.push(temp)
-            temp = []
-          }
-          temp.push(p)
-        })
-        if (temp.length > 0) {
-            sectionalGrids.push(temp);
-          }
-        return sectionalGrids.map((participant,i)=>{
-            return (
-                <SwiperSlide key={i}>
-                    <Grids participants={participant} />
-                </SwiperSlide>
-            )
-        })
+function DisplayGrid({ participants }: { participants: Particpant[] }) {
+  if (participants.length > 6 && screen.width < 600) {
+    let sectionalGrids: Particpant[][] = [];
+    let temp: Particpant[] = [];
+    participants.map((p) => {
+      if (temp.length === 6) {
+        sectionalGrids.push(temp);
+        temp = [];
+      }
+      temp.push(p);
+    });
+    if (temp.length > 0) {
+      sectionalGrids.push(temp);
     }
-    return (
-        <Grids participants={participants} />
-    )
+    return sectionalGrids.map((participant, i) => {
+      return (
+        <SwiperSlide key={i}>
+          <Grids participants={participant} />
+        </SwiperSlide>
+      );
+    });
+  }
+  if (participants.length > 13 && screen.width > 600) {
+    let sectionalGrids: Particpant[][] = [];
+    let temp: Particpant[] = [];
+    participants.map((p) => {
+      if (temp.length === 13) {
+        sectionalGrids.push(temp);
+        temp = [];
+      }
+      temp.push(p);
+    });
+    if (temp.length > 0) {
+      sectionalGrids.push(temp);
+    }
+    return sectionalGrids.map((participant, i) => {
+      return (
+        <SwiperSlide key={i}>
+          <Grids participants={participant} />
+        </SwiperSlide>
+      );
+    });
+  }
+  return <Grids participants={participants} />;
 }
 export function EndCall({
   end,
@@ -132,7 +155,6 @@ export function SelfCam({ children }: { children: React.ReactNode }) {
     </>
   );
 }
-
 
 // {participants.map((participant, i) => {
 //     if (participant.userId === id) {

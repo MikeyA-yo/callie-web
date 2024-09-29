@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import { SelfCam, VidDivs } from "./vids";
 import { Mute, OffCam } from "./starters";
 import { UserAvatar } from "./svgs";
+import ChatView from "./chat";
 
 const peer = new Peer();
 const socket = io("https://callie-rooms.onrender.com");
@@ -16,6 +17,9 @@ export default function Meeting() {
   const [offed, setOffed] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [chats, setChats] = useState<string[]>([]);
+  const [chat, setChat] = useState("");
+  const [me, setMe] = useState<Array<boolean>>([]);
+  const [senders, setSenders] = useState<Array<string>>([]);
   //const [rStreams, setRStreams] = useState<MediaStream[]>([])
   const peers: any = {};
   const effectRan = useRef(false);
@@ -31,12 +35,14 @@ export default function Meeting() {
         });
         setCamStream(stream);
       }
-      socket.on("user-disconnected", (id, p, uname) => {
+      socket.on("user-disconnected", (id, p) => {
         peers[id] && peers[id].close();
         setConns(p);
       });
-      socket.on("data", (data) => {
+      socket.on("data", (data, from) => {
         setChats((prev) => [...prev, data]);
+        setMe((prev) => [...prev, false]);
+        setSenders((prev) => [...prev, from]);
       });
       socket.on("updateP", (p) => {
         setConns(p);
@@ -140,7 +146,7 @@ export default function Meeting() {
   }
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#222831]">
+      <div className="flex flex-col text-[#EEEEEE] items-center justify-center w-full min-h-screen bg-[#222831]">
         <SelfCam>
           <div className="flex flex-col items-center gap-2">
             {camStream && <p>You</p>}
@@ -181,7 +187,7 @@ export default function Meeting() {
                   />
                 </div>
                 <div
-                  className="flex flex-col items-center gap-1 cursor-pointer"
+                  className="flex bg-[#76ABAE] flex-col items-center gap-1 cursor-pointer"
                   onClick={() => setShowChat(!showChat)}
                 >
                   <ChatIcon />
@@ -195,6 +201,40 @@ export default function Meeting() {
           </div>
         </SelfCam>
         <VidDivs participants={conns.filter((c) => c.userId != id)} id={id} />
+        {showChat && (
+          <ChatView
+            me={me}
+            senders={senders}
+            chats={chats}
+            input={(e) => {
+              setChat(e.target.value);
+            }}
+            send={() => {
+              socket.emit("chat", chat, uname);
+              setChats((prev) => [...prev, chat]);
+              setMe((prev) => [...prev, true]);
+              setSenders((prev) => [...prev, uname]);
+              if (document.getElementById("chat-input")) {
+                const input = document.getElementById(
+                  "chat-input"
+                ) as HTMLInputElement;
+                input.value = "";
+              }
+            }}
+            close={() => {
+              setShowChat(false);
+            }}
+            enterSend={(e) => {
+              if (e.key === "Enter") {
+                socket.emit("chat", chat, uname);
+                e.currentTarget.value = "";
+                setChats((prev) => [...prev, chat]);
+                setMe((prev) => [...prev, true]);
+                setSenders((prev) => [...prev, uname]);
+              }
+            }}
+          />
+        )}
       </div>
     </>
   );

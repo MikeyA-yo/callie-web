@@ -43,6 +43,14 @@ export default function Intro() {
             </a>
           </motion.button>
         )}
+        <motion.button
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="p-2 bg-[#31363F] font-sans"
+        >
+          <a href="/join">Join (Open) in Browser</a>
+        </motion.button>
       </div>
       <div className="flex flex-col gap-6 justify-evenly items-center p-4">
         <h1 className="text-3xl">Usages and Instructions:</h1>
