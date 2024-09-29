@@ -23,6 +23,7 @@ export default function Meeting() {
   //const [rStreams, setRStreams] = useState<MediaStream[]>([])
   const peers: any = {};
   const effectRan = useRef(false);
+  const chPop = useRef(false);
   useEffect(() => {
     if (effectRan.current) {
       //
@@ -91,6 +92,12 @@ export default function Meeting() {
       });
     }
   }, [id, camStream]);
+  useEffect(() => {
+    let container = document.getElementById("chats");
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
+  }, [chats, me]);
 
   peer.on("open", (id) => {
     setID(id);
@@ -187,8 +194,11 @@ export default function Meeting() {
                   />
                 </div>
                 <div
-                  className="flex bg-[#76ABAE] flex-col items-center gap-1 cursor-pointer"
-                  onClick={() => setShowChat(!showChat)}
+                  className="flex bg-[#76ABAE] flex-col items-center gap-1 p-2 rounded-full cursor-pointer"
+                  
+                  onClick={() => {
+                      setShowChat(!showChat)
+                  }} // this is not a bug have to leave it like this cause of global document listener
                 >
                   <ChatIcon />
                   <p>

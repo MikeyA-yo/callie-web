@@ -30,10 +30,10 @@ export default function ChatView({
     };
   }, []);
   return (
-    <div className="flex flex-col fixed z-10 translate-y-1/2 translate-x-1/2 right-1/2 bottom-1/2 " ref={chatref}>
+    <div className="flex flex-col gap-2 p-4 bg-[#31363F] bg-opacity-50 fixed z-10 translate-y-1/2 translate-x-1/2 right-1/2 bottom-1/2 " ref={chatref}>
       <div
         id="chats"
-        className="min-h-52 max-h-[25rem] p-3 flex flex-col gap-3 bg-[#31363F]  overflow-auto"
+        className="min-h-52  max-h-[25rem] p-3 bg-[#222831] bg-opacity-50 flex flex-col gap-3 overflow-auto"
       >
         {chats.map((chat, i) => (
           <Chat message={chat} me={me[i]} sender={senders[i]} />
@@ -45,7 +45,7 @@ export default function ChatView({
             onChange={input}
             onKeyDown={enterSend}
             id="chat-input"
-            className="p-2 text-[#EEEEEE] placeholder:text-[#EEEEEE] bg-[#76ABAE] rounded border border-[#EEEEEE] outline-none"
+            className="p-2 text-[#EEEEEE] placeholder:text-[#EEEEEE] bg-[#76ABAE] focus:border-l focus:border-y focus:border-[#EEEEEE] outline-none"
             placeholder="Type in a message here"
           />
           <div onClick={send}>
