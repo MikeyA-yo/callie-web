@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { SelfCam, VidDivs } from "./vids";
 import { Mute, OffCam } from "./starters";
 import { UserAvatar } from "./svgs";
-import ChatView from "./chat";
+import ChatView, { ChatPopUp } from "./chat";
 
 const peer = new Peer();
 const socket = io("https://callie-rooms.onrender.com");
@@ -20,7 +20,9 @@ export default function Meeting() {
   const [chat, setChat] = useState("");
   const [me, setMe] = useState<Array<boolean>>([]);
   const [senders, setSenders] = useState<Array<string>>([]);
-  //const [rStreams, setRStreams] = useState<MediaStream[]>([])
+  const [pop, setPop] = useState(false);
+  const [lpop, setLPop] = useState(false);
+  const [pUsers, setPUsers] = useState<Array<string>>([]);
   const peers: any = {};
   const effectRan = useRef(false);
   const chPop = useRef(false);
@@ -36,14 +38,25 @@ export default function Meeting() {
         });
         setCamStream(stream);
       }
-      socket.on("user-disconnected", (id, p) => {
+      socket.on("user-disconnected", (id, p, uname) => {
         peers[id] && peers[id].close();
         setConns(p);
+        setLPop(true);
+        setPUsers(prev => [...prev, uname])
+        setTimeout(()=>{
+          setLPop(false)
+        }, 4500)
       });
       socket.on("data", (data, from) => {
         setChats((prev) => [...prev, data]);
         setMe((prev) => [...prev, false]);
         setSenders((prev) => [...prev, from]);
+        if (!document.getElementById("chats")) {
+          setPop(true);
+        }
+        setTimeout(() => {
+          setPop(false);
+        }, 6000);
       });
       socket.on("updateP", (p) => {
         setConns(p);
@@ -154,6 +167,25 @@ export default function Meeting() {
   return (
     <>
       <div className="flex flex-col text-[#EEEEEE] items-center justify-center w-full min-h-screen bg-[#222831]">
+        {pop && (
+          <ChatPopUp
+            from={senders[senders.length - 1]}
+            message={chats[chats.length - 1]}
+            show={() => {
+              setShowChat(true);
+              setPop(false);
+            }}
+          />
+        )}
+        {lpop && (
+          <ChatPopUp
+            from={pUsers[pUsers.length - 1]}
+            message="left"
+            show={() => {
+              setLPop(false);
+            }}
+          />
+        )}
         <SelfCam>
           <div className="flex flex-col items-center gap-2">
             {camStream && <p>You</p>}
@@ -196,8 +228,8 @@ export default function Meeting() {
                 <div
                   className="flex bg-[#76ABAE] flex-col items-center gap-1 p-2 rounded-full cursor-pointer"
                   onClick={() => {
-                      !chPop.current && setShowChat(!showChat)
-                      if(!showChat) chPop.current = false
+                    !chPop.current && setShowChat(!showChat);
+                    if (!showChat) chPop.current = false;
                   }} // this is not a bug have to leave it like this cause of global document listener
                 >
                   <ChatIcon />
@@ -233,7 +265,7 @@ export default function Meeting() {
             }}
             close={() => {
               setShowChat(false);
-              chPop.current = true
+              chPop.current = true;
             }}
             enterSend={(e) => {
               if (e.key === "Enter") {
