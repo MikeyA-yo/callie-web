@@ -150,7 +150,6 @@ export default function Meeting() {
       });
       let parent = document.getElementById(id.substring(0, id.indexOf("-")));
       parent?.insertBefore(video, parent.lastChild);
-      video.play();
     }
   }
   function updateMediaStates() {
