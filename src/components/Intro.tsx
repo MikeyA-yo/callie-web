@@ -18,7 +18,7 @@ interface links {
 
 export default function Intro() {
   let os = getOS();
-  let condition = os === ("Windows" || "MacOS" || "Linux");
+  let condition = os === "Windows" || os === "MacOS" || os === "Linux"
   return (
     <>
       <div className="flex flex-col min-h-screen gap-2 p-2 items-center justify-center">
