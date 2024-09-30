@@ -31,7 +31,7 @@ export function VidDivs({
   if (participants.length == 0) {
     return (
       <>
-        <h2 className="text-3xl">You are alone in this meeting</h2>
+        <h2 className="lg:text-3xl md:text-2xl text-xl p-2 text-wrap">You are alone in this meeting</h2>
       </>
     );
   } else {
@@ -159,7 +159,7 @@ export function EndCall({
 export function SelfCam({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="top-4 right-4 fixed z-10">{children}</div>
+      <div className="bottom-4 right-4 fixed z-10">{children}</div>
     </>
   );
 }

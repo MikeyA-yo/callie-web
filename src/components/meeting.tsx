@@ -42,10 +42,10 @@ export default function Meeting() {
         peers[id] && peers[id].close();
         setConns(p);
         setLPop(true);
-        setPUsers(prev => [...prev, uname])
-        setTimeout(()=>{
-          setLPop(false)
-        }, 4500)
+        setPUsers((prev) => [...prev, uname]);
+        setTimeout(() => {
+          setLPop(false);
+        }, 4500);
       });
       socket.on("data", (data, from) => {
         setChats((prev) => [...prev, data]);
@@ -141,7 +141,8 @@ export default function Meeting() {
       const video = document.createElement("video");
       video.autoplay = true;
       video.controls = false;
-      video.className = "max-h-44 max-w-44";
+      video.className =
+        "lg:max-h-44 md:max-h-44 md:max-w-44 max-w-32 max-h-32 lg:max-w-44";
       video.id = id;
       video.srcObject = stream;
       video.addEventListener("dblclick", () => {
@@ -149,6 +150,7 @@ export default function Meeting() {
       });
       let parent = document.getElementById(id.substring(0, id.indexOf("-")));
       parent?.insertBefore(video, parent.lastChild);
+      video.play();
     }
   }
   function updateMediaStates() {
@@ -166,7 +168,7 @@ export default function Meeting() {
   }
   return (
     <>
-      <div className="flex flex-col text-[#EEEEEE] gap-4 items-center justify-center w-full min-h-screen bg-[#222831]">
+      <div className="flex flex-col  text-[#EEEEEE] gap-4 items-center justify-center w-full min-h-screen bg-[#222831]">
         {pop && (
           <ChatPopUp
             from={senders[senders.length - 1]}
@@ -186,6 +188,21 @@ export default function Meeting() {
             }}
           />
         )}
+        <div className="fixed z-10 top-4 left-4">
+          <div
+            className="flex bg-[#76ABAE] flex-col items-center gap-1 p-2 rounded-full cursor-pointer"
+            onClick={() => {
+              !chPop.current && setShowChat(!showChat);
+              if (!showChat) chPop.current = false;
+            }} // this is not a bug have to leave it like this cause of global document listener
+          >
+            <ChatIcon />
+            <p>
+              {showChat && "Close chat"}
+              {!showChat && "Open Chat"}
+            </p>
+          </div>
+        </div>
         <SelfCam>
           <div className="flex flex-col items-center gap-2">
             {camStream && <p>You</p>}
@@ -194,7 +211,9 @@ export default function Meeting() {
               controls={false}
               playsInline
               id="userCam"
-              className={`max-h-44 max-w-44 rounded ${offed ? "hidden" : ""}`}
+              className={`lg:max-h-44 md:max-h-44 md:max-w-44 max-w-32 max-h-32 lg:max-w-44 rounded ${
+                offed ? "hidden" : ""
+              }`}
               muted
               onDoubleClick={(e) => {
                 e.currentTarget.requestFullscreen();
@@ -225,28 +244,17 @@ export default function Meeting() {
                     offed={offed}
                   />
                 </div>
-                <div
-                  className="flex bg-[#76ABAE] flex-col items-center gap-1 p-2 rounded-full cursor-pointer"
-                  onClick={() => {
-                    !chPop.current && setShowChat(!showChat);
-                    if (!showChat) chPop.current = false;
-                  }} // this is not a bug have to leave it like this cause of global document listener
-                >
-                  <ChatIcon />
-                  <p>
-                    {showChat && "Close chat"}
-                    {!showChat && "Open Chat"}
-                  </p>
-                </div>
               </div>
             )}
           </div>
         </SelfCam>
         <VidDivs participants={conns.filter((c) => c.userId != id)} id={id} />
-          <EndCall end={()=>{
-            window.location.replace("/join")
-          }}/>
-          Leave Call
+        <EndCall
+          end={() => {
+            window.location.replace("/join");
+          }}
+        />
+        Leave Call
         {showChat && (
           <ChatView
             me={me}
