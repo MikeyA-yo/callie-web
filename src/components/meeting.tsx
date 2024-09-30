@@ -139,6 +139,7 @@ export default function Meeting() {
     const existing = document.getElementById(id);
     if (!existing) {
       const video = document.createElement("video");
+      video.playsInline = true;
       video.autoplay = true;
       video.controls = false;
       video.className =
