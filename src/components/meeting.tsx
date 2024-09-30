@@ -1,7 +1,7 @@
 import Peer from "peerjs";
 import { useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
-import { SelfCam, VidDivs } from "./vids";
+import { EndCall, SelfCam, VidDivs } from "./vids";
 import { Mute, OffCam } from "./starters";
 import { UserAvatar } from "./svgs";
 import ChatView, { ChatPopUp } from "./chat";
@@ -166,7 +166,7 @@ export default function Meeting() {
   }
   return (
     <>
-      <div className="flex flex-col text-[#EEEEEE] items-center justify-center w-full min-h-screen bg-[#222831]">
+      <div className="flex flex-col text-[#EEEEEE] gap-4 items-center justify-center w-full min-h-screen bg-[#222831]">
         {pop && (
           <ChatPopUp
             from={senders[senders.length - 1]}
@@ -243,6 +243,10 @@ export default function Meeting() {
           </div>
         </SelfCam>
         <VidDivs participants={conns.filter((c) => c.userId != id)} id={id} />
+          <EndCall end={()=>{
+            window.location.replace("/join")
+          }}/>
+          Leave Call
         {showChat && (
           <ChatView
             me={me}

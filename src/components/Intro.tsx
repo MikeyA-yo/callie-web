@@ -66,7 +66,7 @@ function Usage() {
   return (
     <>
       <div className="flex lg:flex-row items-center flex-col text-center justify-evenly p-5 bg-[#31363F] gap-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col justify-evenly gap-4">
           <h2 className="text-2xl">
             Simplicity, simple and easy to understand UI
           </h2>
@@ -90,7 +90,7 @@ function OpenDemo() {
   return (
     <>
       <div className="flex lg:flex-row items-center flex-col text-center justify-evenly p-5 bg-[#31363F] gap-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col justify-evenly gap-4">
           <h2 className="text-2xl">Open Camera</h2>
           <p>
             It's very simple, easy and concise to open the camera, just click
@@ -106,7 +106,7 @@ function OpenDemo() {
         </div>
       </div>
       <div className="flex lg:flex-row items-center flex-col text-center justify-evenly p-5 bg-[#31363F] gap-4">
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col justify-evenly gap-4">
           <h2 className="text-xl">Turn Video Off</h2>
           <p>
             Just click on the icon below indicated by the blue arrow, Now you
@@ -130,7 +130,7 @@ function Join() {
   return (
     <>
       <div className="flex lg:flex-row items-center flex-col text-center justify-evenly p-5 bg-[#31363F] gap-4">
-        <div>
+        <div className="flex flex-col gap-4 justify-evenly">
           <h2 className="text-2xl">Join Meetings</h2>
           <p>
             When you click join meeting, the input field shows up, type in the
@@ -150,7 +150,7 @@ function Join() {
         </div>
       </div>
       <div className="flex lg:flex-row items-center flex-col text-center justify-evenly p-5 bg-[#31363F] gap-4">
-        <div>
+        <div className="flex flex-col gap-4 justify-evenly">
           <h2 className="text-2xl">Joined Demo</h2>
           <p>
             Here you have clicked join room, and another user has also joined (i
@@ -177,7 +177,7 @@ function ChatDemo() {
   return (
     <>
       <div className="flex lg:flex-row items-center flex-col text-center justify-evenly p-5 bg-[#31363F] gap-4">
-        <div>
+        <div className="flex flex-col gap-4 justify-evenly">
           <h2 className="text-2xl">Chat Demo</h2>
           <p>
             That's the chat box, where you can send messages to everyone in the
