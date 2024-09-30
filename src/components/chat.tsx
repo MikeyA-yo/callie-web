@@ -45,6 +45,7 @@ export default function ChatView({
             onChange={input}
             onKeyDown={enterSend}
             id="chat-input"
+            autoComplete="off"
             className="p-2 text-[#EEEEEE] placeholder:text-[#EEEEEE] bg-[#76ABAE] focus:border-l focus:border-y focus:border-[#EEEEEE] outline-none"
             placeholder="Type in a message here"
           />
