@@ -20,7 +20,12 @@ export default function Join(){
                      }
                    }}>Join</button>
                     <button className="p-2 border rounded border-[#76ABAE] hover:border-0 hover:bg-[#76ABAE]" onClick={()=>{
-                        setLink(location.href + `${roomID}?uname=${uname}` )
+                        
+                        if(location.href.endsWith("/")){
+                            setLink(location.href + `${roomID}?uname=${uname}` )
+                        }else{
+                            setLink(location.href + `/${roomID}?uname=${uname}` )
+                        }
                     }}>Generate Link (optional)</button>
                     {link.length > 4 && <a href={link} target="_blank">{link}</a>} 
                 </div>
