@@ -2,11 +2,11 @@ import { motion } from "framer-motion";
 
 export const links: links = {
   Linux:
-    "https://github.com/MikeyA-yo/callie/releases/download/v0.0.8/linux-callie-0.0.8x64.zip",
+    "https://github.com/MikeyA-yo/callie/releases/download/v0.0.9/linux-callie-0.0.9x64.zip",
   Windows:
-    "https://github.com/MikeyA-yo/callie/releases/download/v0.0.8/win-callie-0.0.8x64.zip",
+    "https://github.com/MikeyA-yo/callie/releases/download/v0.0.9/win-callie-0.0.9x64.zip",
   MacOS:
-    "https://github.com/MikeyA-yo/callie/releases/download/v0.0.8/mac-callie-0.0.8.zip",
+    "https://github.com/MikeyA-yo/callie/releases/download/v0.0.9/mac-callie-0.0.9.zip",
 };
 
 interface links {
